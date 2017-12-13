@@ -36,8 +36,10 @@ namespace FS_Lab4
                             {
                                 FnLabType number;
                                 string snumber = s.Substring(0, s.IndexOf(" "));
-                                snumber = snumber.Replace('.', ',');
+                                //snumber = snumber.Replace('.', ',');
+                                //Console.WriteLine(snumber);
                                 FnLabType.TryParse(snumber, out number);
+                                //Console.WriteLine(number);
                                 s = s.Remove(0, s.IndexOf(" ") + 1);
                                 s = s.TrimStart(' ');
 
