@@ -1,5 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using FnLabType = System.Single;
 
+namespace FS_Lab4
+{
+    static class FSLab4
+    {
+        static private FnLabType number = (FnLabType)0.0;
 
         public static FnLabType[,] LoadFromTextFile(string name, int size)
         {
@@ -46,7 +57,30 @@ using System;
                 return result;
             }
         }
-        
+
+        // Определяет количество значимых цифр после запятой
+        public static int MeaningNumbers(FnLabType input)
+        {
+            FnLabType number = (FnLabType)0.0;
+            string s = "";
+            int eps = 0;
+            if (number.GetType().ToString() == "System.Double")
+            {
+                s = Math.Abs(input).ToString("F15"); // s = A[i,i] c 15-ю цифрами после запятой
+                s = s.Substring(0, 16); // всего в FnLabType 15 значачих цифр. + 1 запятая. Берем из s только 15 значащих цифр
+                eps = 15 - s.IndexOf(","); // отсюда получаем кол-во значащих цифр после запятой. 15 минус положение "," 
+                if (Math.Truncate(Math.Abs(input)) == (FnLabType)0) eps++;
+            }
+            else if (number.GetType().ToString() == "System.Single")
+            {
+                s = Math.Abs(input).ToString("F7"); // s = A[i,i] c 7-ю цифрами после запятой
+                s = s.Substring(0, 8); // всего в FnLabType 7 значачих цифр. + 1 запятая. Берем из s только 7 значащих цифр
+                eps = 7 - s.IndexOf(","); // отсюда получаем кол-во значащих цифр после запятой. 7 минус положение "," 
+                if (Math.Truncate(Math.Abs(input)) == (FnLabType)0) eps++;
+            }    
+            return eps;
+        }
+
         public static void SaveMatrixToTextFile(string name, FnLabType[,] matrix, int collength, int rowlength)
         {
             using (var file = File.Open(name, FileMode.Create))
@@ -68,3 +102,24 @@ using System;
                     }
                 }
         }
+
+        static void Main(string[] args)
+        {
+            int n;
+            FnLabType[,] A; // Матрица A
+
+            // Запрос ввода размера системы
+            while (true)
+            {
+                Console.Write("Введите размер системы: ");
+                if (int.TryParse(Console.ReadLine(), out n))
+                    break;
+            }
+
+            A = LoadFromTextFile("input.txt", n); Console.WriteLine();
+            SaveMatrixToTextFile("output.txt", A, n, n);
+
+        }
+
+    }
+}
